@@ -1,0 +1,14 @@
+WITH RECURSIVE JT AS (
+    SELECT ID, PARENT_ID, 1 as generation
+    FROM ECOLI_DATA
+    WHERE PARENT_ID IS NULL
+    UNION ALL
+    SELECT org.ID, org.PARENT_ID, jt.generation + 1
+    FROM ECOLI_DATA org
+    JOIN JT jt ON org.PARENT_ID = jt.ID
+)
+
+SELECT ID
+FROM JT
+WHERE JT.generation = 3
+ORDER BY 1 ASC;
