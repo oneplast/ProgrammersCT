@@ -3,11 +3,7 @@ class Solution {
         long answer = 0;
         for (int i = 1; i <= r2; i++) {
             int maxY = (int) getDistance(r2, i);
-            int minY = 0;
-            int minYDistance = (int) Math.ceil(getDistance(r1, i));
-            if (minYDistance > 0) {
-                minY = minYDistance;
-            }
+            int minY = (int) Math.ceil(getDistance(r1, i));
 
             answer += (maxY - minY + 1);
         }
