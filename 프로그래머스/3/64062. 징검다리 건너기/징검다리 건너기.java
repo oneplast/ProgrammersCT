@@ -1,26 +1,38 @@
-import java.util.*;
-
 class Solution {
 
     public int solution(int[] stones, int k) {
-        Deque<Integer> deque = new ArrayDeque<>();
-        int min = Integer.MAX_VALUE;
+        int left = 0;
+        int right = 200000000;
+        int result = 0;
 
-        for (int i = 0; i < stones.length; i++) {
-            while (!deque.isEmpty() && stones[deque.peekLast()] <= stones[i]) {
-                deque.pollLast();
-            }
-            deque.offerLast(i);
+        while (left <= right) {
+            int mid = (left + right) / 2;
 
-            if (deque.peekFirst() <= i - k) {
-                deque.pollFirst();
-            }
-
-            if (i >= k - 1) {
-                min = Math.min(min, stones[deque.peekFirst()]);
+            if (isPossible(stones, k, mid)) {
+                result = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
             }
         }
 
-        return min;
+        return result;
+    }
+
+    private boolean isPossible(int[] stones, int k, int mid) {
+        int cnt = 0;
+
+        for (int stone : stones) {
+            if (stone < mid) {
+                ++cnt;
+                if (cnt >= k) {
+                    return false;
+                }
+            } else {
+                cnt = 0;
+            }
+        }
+
+        return true;
     }
 }
