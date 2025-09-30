@@ -27,10 +27,14 @@ class Solution {
             }
         }
 
-        String u = new String(chars, start, lastIdx - start);
+        if (checkValid(chars, start, lastIdx)) {
+            StringBuilder sb = new StringBuilder(lastIdx - 1 + (end - lastIdx));
+            for (int i = start; i < lastIdx; i++) {
+                sb.append(chars[i]);
+            }
 
-        if (checkValid(u.toCharArray())) {
-            return u + solve(chars, lastIdx, end);
+            sb.append(solve(chars, lastIdx, end));
+            return sb.toString();
         } else {
             StringBuilder sb = new StringBuilder();
             sb.append("(");
@@ -45,10 +49,10 @@ class Solution {
         }
     }
 
-    private boolean checkValid(char[] chars) {
+    private boolean checkValid(char[] chars, int start, int end) {
         int cnt = 0;
-        for (char c : chars) {
-            if (c == '(') {
+        for (int i = start; i < end; i++) {
+            if (chars[i] == '(') {
                 ++cnt;
             } else {
                 --cnt;
