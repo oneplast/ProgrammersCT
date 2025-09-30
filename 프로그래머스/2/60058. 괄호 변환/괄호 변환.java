@@ -1,72 +1,62 @@
-import java.util.*;
-import java.util.stream.*;
-
 class Solution {
     public String solution(String p) {
-
-        if (p.isEmpty()) {
+        if (p == null || p.isEmpty()) {
             return "";
         }
 
-        int lastIdx = -1;
-        int sCnt = 0;
-        int eCnt = 0;
-        char[] chars = p.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
+        return solve(p.toCharArray(), 0, p.length());
+    }
+
+    private String solve(char[] chars, int start, int end) {
+        if (start >= end) {
+            return "";
+        }
+
+        int cnt = 0;
+        int lastIdx = start;
+        for (int i = start; i < end; i++) {
             if (chars[i] == '(') {
-                ++sCnt;
+                ++cnt;
             } else {
-                ++eCnt;
+                --cnt;
             }
-            if (sCnt == eCnt) {
+
+            if (cnt == 0) {
                 lastIdx = i + 1;
                 break;
             }
         }
 
-        String u = p.substring(0, lastIdx);
-        String v = lastIdx >= chars.length ? "" : p.substring(lastIdx);
+        String u = new String(chars, start, lastIdx - start);
 
-        StringBuffer sb = new StringBuffer();
-        if (checkValid(u)) {
-            sb.append(u);
-            return sb.append(solution(v)).toString();
+        if (checkValid(u.toCharArray())) {
+            return u + solve(chars, lastIdx, end);
         } else {
+            StringBuilder sb = new StringBuilder();
             sb.append("(");
-            sb.append(solution(v));
+            sb.append(solve(chars, lastIdx, end));
             sb.append(")");
-            u = u.substring(1, u.length() - 1);
-            return sb.append(reversStr(u)).toString();
+
+            for (int i = start + 1; i < lastIdx - 1; i++) {
+                sb.append(chars[i] == '(' ? ')' : '(');
+            }
+
+            return sb.toString();
         }
     }
 
-    private boolean checkValid(String u) {
-        Stack<Character> stack = new Stack<>();
-        for (char c : u.toCharArray()) {
-            if (stack.isEmpty() || c == '(') {
-                stack.add(c);
-                continue;
+    private boolean checkValid(char[] chars) {
+        int cnt = 0;
+        for (char c : chars) {
+            if (c == '(') {
+                ++cnt;
+            } else {
+                --cnt;
             }
-
-            if (stack.peek() == '(' && c == ')') {
-                stack.pop();
+            if (cnt < 0) {
+                return false;
             }
         }
-
-        return stack.isEmpty();
-    }
-
-    private String reversStr(String str) {
-        return Arrays.stream(str.split(""))
-                .map(s -> {
-                    switch (s) {
-                        case "(":
-                            return ")";
-                        case ")":
-                            return "(";
-                        default:
-                            return "";
-                    }
-                }).collect(Collectors.joining());
+        return cnt == 0;
     }
 }
