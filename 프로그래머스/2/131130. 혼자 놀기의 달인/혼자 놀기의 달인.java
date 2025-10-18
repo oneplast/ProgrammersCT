@@ -3,43 +3,38 @@ import java.util.*;
 class Solution {
 
     int n;
-    int[] dp;
+    boolean[] visited;
     List<Integer> groups;
 
     public int solution(int[] cards) {
         n = cards.length;
-        dp = new int[n];
+        visited = new boolean[n];
         groups = new ArrayList<>();
-        Arrays.fill(dp, 1);
 
-        int group = -1;
-        int groupIdx = 0;
         for (int i = 0; i < n; i++) {
-            if (dp[i] < 0) {
-                continue;
+            int groupCnt = 0;
+            int value = dfs(cards, i, groupCnt);
+            if (value > 0) {
+                groups.add(value);
             }
-
-            dp[i] = group;
-            groups.add(1);
-
-            int nextIdx = cards[i] - 1;
-            while (dp[nextIdx] != group) {
-                dp[nextIdx] = group;
-                groups.set(groupIdx, groups.get(groupIdx) + 1);
-                int curVal = cards[nextIdx];
-                nextIdx = curVal - 1;
-            }
-
-            --group;
-            ++groupIdx;
         }
 
-        if (group >= -2) {
+        if (groups.size() < 2) {
             return 0;
         }
 
-        groups.sort((a, b) -> b - a);
+        groups.sort(Collections.reverseOrder());
 
         return groups.get(0) * groups.get(1);
+    }
+
+    private int dfs(int[] cards, int idx, int groupCnt) {
+        if (visited[idx]) {
+            return groupCnt;
+        }
+
+        visited[idx] = true;
+        int nextIdx = cards[idx] - 1;
+        return dfs(cards, nextIdx, groupCnt + 1);
     }
 }
