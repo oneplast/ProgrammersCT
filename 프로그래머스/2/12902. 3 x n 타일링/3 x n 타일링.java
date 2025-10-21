@@ -13,7 +13,10 @@ class Solution {
         dp[2] = 3;
 
         for (int i = 4; i <= n; i += 2) {
-            dp[i] = (4 * dp[i - 2] - dp[i - 4] + MOD) % MOD;
+            dp[i] = (3 * dp[i - 2]) % MOD;
+            for (int j = i - 4; j >= 0; j -= 2) {
+                dp[i] = (dp[i] + (2 * dp[j])) % MOD;
+            }
         }
 
         return (int) dp[n];
