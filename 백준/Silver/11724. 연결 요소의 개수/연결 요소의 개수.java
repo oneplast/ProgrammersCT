@@ -32,7 +32,7 @@ public class Main {
         int totalCnt = 0;
         for (int i = 1; i <= n; i++) {
             if (!visited[i]) {
-                dfs(visited, i);
+                bfs(visited, i);
                 totalCnt++;
             }
         }
@@ -40,7 +40,7 @@ public class Main {
         System.out.print(totalCnt);
     }
 
-    public static void dfs(boolean[] visited, int start) {
+    public static void bfs(boolean[] visited, int start) {
         Queue<Integer> queue = new ArrayDeque<>();
         queue.offer(start);
         visited[start] = true;
