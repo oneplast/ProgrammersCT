@@ -33,7 +33,9 @@ public class Main {
                 int nextY = y + dir[0];
                 int nextX = x + dir[1];
                 
-                if (nextY >= 0 && nextY < n && nextX >= 0 && nextX < m && miro[nextY][nextX] == 1) {
+                if (nextY >= 0 && nextY < n && nextX >= 0 && nextX < m 
+                        && !(nextY == 0 && nextX == 0) && miro[nextY][nextX] == 1)
+                {
                     miro[nextY][nextX] = miro[y][x] + 1;
                     queue.offer(new int[]{nextY, nextX});
                 }
