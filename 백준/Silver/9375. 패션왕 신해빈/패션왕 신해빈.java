@@ -18,9 +18,9 @@ public class Main {
             n = Integer.parseInt(br.readLine());
             map = new HashMap<>();
             result = 1;
-            for (int ㅓ = 0; ㅓ < n; ㅓ++) {
+            for (int j = 0; j < n; j++) {
                 token = new StringTokenizer(br.readLine());
-                item = token.nextToken();
+                token.nextToken();
                 category = token.nextToken();
                 
                 map.put(category, map.getOrDefault(category, 0) + 1);
