@@ -2,44 +2,29 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static int n;
+    static int[] dp;
 
-	static int[] dp;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine());
+        dp = new int[n + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[n] = 0;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
+        while (n >= 1) {
+            if (n >= 3 && n % 3 == 0) {
+                dp[n / 3] = Math.min(dp[n / 3], dp[n] + 1);
+            }
 
-		dp = new int[n + 1];
-		Arrays.fill(dp, Integer.MAX_VALUE);
-		dp[n] = 0;
-		Queue<Integer> queue = new LinkedList<>();
-		queue.offer(n);
+            if (n >= 2 && n % 2 == 0) {
+                dp[n / 2] = Math.min(dp[n / 2], dp[n] + 1);
+            }
 
-		while (!queue.isEmpty()) {
-			n = queue.poll();
+            dp[n - 1] = Math.min(dp[n - 1], dp[n] + 1);
+            n--;
+        }
 
-			if (n >= 1) {
-				if (dp[n] == Integer.MAX_VALUE) {
-					continue;
-				}
-
-				if (n % 3 == 0 && dp[n / 3] > dp[n] + 1) {
-					dp[n / 3] = dp[n] + 1;
-					queue.offer(n / 3);
-				}
-
-				if (n % 2 == 0 && dp[n / 2] > dp[n] + 1) {
-					dp[n / 2] = dp[n] + 1;
-					queue.offer(n / 2);
-				}
-
-				if (dp[n - 1] > dp[n] + 1) {
-					dp[n - 1] = dp[n] + 1;
-					queue.offer(--n);
-				}
-			}
-		}
-
-		System.out.println(dp[1]);
-	}
+        System.out.print(dp[1]);
+    }
 }
