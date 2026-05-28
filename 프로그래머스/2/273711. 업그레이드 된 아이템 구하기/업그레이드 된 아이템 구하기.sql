@@ -1,11 +1,6 @@
-select i.item_id, i.item_name, i.rarity
-from (
-    select t.item_id
-    from item_tree t
-    join item_info i
-    on i.item_id = t.parent_item_id
-    and i.rarity = 'RARE'
-) qr
-join item_info i
-on qr.item_id = i.item_id
-order by i.item_id desc;
+SELECT ni.ITEM_ID, ni.ITEM_NAME, ni.RARITY
+FROM ITEM_INFO ii
+JOIN ITEM_TREE it ON ii.ITEM_ID = it.PARENT_ITEM_ID
+JOIN ITEM_INFO ni ON it.ITEM_iD = ni.ITEM_ID
+WHERE ii.RARITY = 'RARE'
+ORDER BY ITEM_ID DESC;
