@@ -1,8 +1,9 @@
-select i.item_id item_id, i.item_name item_name
-from item_info i
-join (
-    select item_id id
-    from item_tree
-    where parent_item_id is null
-) j
-on j.id = i.item_id;
+WITH ROOT_TREE AS (
+    SELECT ITEM_ID
+    FROM ITEM_TREE
+    WHERE PARENT_ITEM_ID IS NULL
+)
+SELECT ii.ITEM_ID, ii.ITEM_NAME
+FROM ITEM_INFO ii
+JOIN ROOT_TREE rt ON ii.ITEM_ID = rt.ITEM_ID
+ORDER BY ITEM_ID ASC;
