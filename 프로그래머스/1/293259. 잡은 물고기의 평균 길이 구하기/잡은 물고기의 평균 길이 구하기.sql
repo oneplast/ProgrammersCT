@@ -1,2 +1,2 @@
-select round(avg(ifnull(length, 10)), 2) average_length
-from fish_info;
+SELECT ROUND(AVG(GREATEST(IFNULL(LENGTH, 10), 10)), 2) AS AVERAGE_LENGTH
+FROM FISH_INFO;
