@@ -1,6 +1,5 @@
-select distinct d.id id, d.email email, d.first_name first_name, d.last_name last_name
-from developers d
-join skillcodes s
-on s.name in ('C#', 'Python')
-and d.skill_code & s.code = s.code
-order by id asc;
+SELECT DISTINCT d.ID, d.EMAIL, d.FIRST_NAME, d.LAST_NAME
+FROM DEVELOPERS d
+JOIN SKILLCODES s ON d.SKILL_CODE & s.CODE = s.CODE
+WHERE s.NAME IN ('Python', 'C#')
+ORDER BY d.ID;
