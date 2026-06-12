@@ -1,9 +1,9 @@
-select pt_name, pt_no, gend_cd, age, 
-case 
-    when tlno is null then 'NONE'
-    else tlno
-end as tlno
-from patient
-where age <= 12
-and gend_cd = 'w'
-order by age desc, pt_name asc;
+SELECT PT_NAME, PT_NO, GEND_CD, AGE,
+    CASE
+        WHEN TLNO IS NULL THEN 'NONE'
+        ELSE TLNO
+    END AS TLNO
+FROM PATIENT
+WHERE AGE <= 12
+AND GEND_CD = 'W'
+ORDER BY AGE DESC, PT_NAME ASC;
