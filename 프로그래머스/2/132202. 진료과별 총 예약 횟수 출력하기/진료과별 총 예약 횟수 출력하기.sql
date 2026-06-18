@@ -1,5 +1,5 @@
-select mcdp_cd '진료과코드', count(mcdp_cd) '5월예약건수'
-from appointment
-where date_format(apnt_ymd, '%Y-%m') = '2022-05'
-group by mcdp_cd
-order by `5월예약건수` asc, `진료과코드` asc;
+SELECT MCDP_CD AS '진료과코드', COUNT(*) AS '5월예약건수'
+FROM APPOINTMENT
+WHERE DATE_FORMAT(APNT_YMD, '%Y-%m') = '2022-05'
+GROUP BY MCDP_CD
+ORDER BY 2 ASC, 1 ASC;
