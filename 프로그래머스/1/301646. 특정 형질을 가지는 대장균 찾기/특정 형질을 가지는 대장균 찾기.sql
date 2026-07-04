@@ -1,4 +1,4 @@
-select count(*) count
-from ecoli_data
-where (genotype & 2) != 2
-and ((genotype & 4) = 4 or (genotype & 1) = 1);
+SELECT COUNT(*) AS COUNT
+FROM ECOLI_DATA
+WHERE GENOTYPE & 2 != 2
+    AND (GENOTYPE & 1 = 1 OR GENOTYPE & 4 = 4);
