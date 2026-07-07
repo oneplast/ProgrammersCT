@@ -1,11 +1,7 @@
-select b.title title
-    , b.board_id board_id
-    , r.reply_id reply_id
-    , r.writer_id writer_id
-    , r.contents contents
-    , date_format(r.created_date, '%Y-%m-%d') created_date
-from used_goods_board b
-join used_goods_reply r
-on b.board_id = r.board_id
-and date_format(b.created_date, '%Y-%m') = '2022-10'
-order by created_date asc, b.title asc;
+SELECT ugb.TITLE, ugb.BOARD_ID, ugr.REPLY_ID, ugr.WRITER_ID,
+        ugr.CONTENTS, ugr.CREATED_DATE
+FROM USED_GOODS_BOARD ugb
+JOIN USED_GOODS_REPLY ugr
+    ON ugb.BOARD_ID = ugr.BOARD_ID
+WHERE DATE_FORMAT(ugb.CREATED_DATE, '%Y-%m') = '2022-10'
+ORDER BY ugr.CREATED_DATE ASC, ugb.TITLE ASC;
