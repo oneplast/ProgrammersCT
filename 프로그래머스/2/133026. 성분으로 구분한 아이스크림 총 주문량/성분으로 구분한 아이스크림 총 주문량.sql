@@ -1,9 +1,6 @@
-select j.ingredient_type, sum(f.total_order)
-from first_half f
-join
-(
-    select * from icecream_info
-) j
-on f.flavor = j.flavor
-group by j.ingredient_type
-order by f.total_order asc;
+SELECT ii.INGREDIENT_TYPE, SUM(fh.TOTAL_ORDER) AS TOTAL_ORDER
+FROM FIRST_HALF fh
+JOIN ICECREAM_INFO ii
+    ON fh.FLAVOR = ii.FLAVOR
+GROUP BY ii.INGREDIENT_TYPE
+ORDER BY TOTAL_ORDER ASC;
