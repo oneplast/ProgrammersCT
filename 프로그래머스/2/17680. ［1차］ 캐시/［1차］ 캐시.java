@@ -1,37 +1,39 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
     private static final int CACHE_HIT = 1;
     private static final int CACHE_MISS = 5;
-
+    
     public int solution(int cacheSize, String[] cities) {
         int result = 0;
-        Queue<String> queue = new LinkedList<>();
-
+        
         if (cacheSize == 0) {
             return CACHE_MISS * cities.length;
         }
-
-        for (String city : cities) {
-            Optional<String> opStr = queue.stream().filter(str -> str.equalsIgnoreCase(city)).findFirst();
-
-            if (opStr.isPresent()) {
-                queue.remove(opStr.get());
-                queue.offer(city);
+        
+        String[] upperCities = Arrays.stream(cities)
+            .map(String::toUpperCase)
+            .toArray(String[]::new);
+        
+        Queue<String> queue = new ArrayDeque<>();
+        for (String city : upperCities) {
+            if (queue.remove(city)) {
                 result += CACHE_HIT;
+                queue.offer(city);
                 continue;
             }
-
+            
             if (queue.size() < cacheSize) {
                 queue.offer(city);
             } else {
                 queue.poll();
                 queue.offer(city);
             }
-
+            
             result += CACHE_MISS;
         }
-
+        
         return result;
     }
 }
