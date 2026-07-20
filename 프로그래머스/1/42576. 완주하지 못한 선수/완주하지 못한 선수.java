@@ -2,20 +2,19 @@ import java.util.*;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        Map<String, Integer> comp = new HashMap<>();
-
-        for (int i = 0; i < completion.length; i++) {
-            comp.put(completion[i], comp.getOrDefault(completion[i], 0) + 1);
+        Map<String, Integer> completionMap = new HashMap<>();
+        for (String person : completion) {
+            completionMap.merge(person, 1, Integer::sum);
         }
-
-        for (int i = 0; i < participant.length; i++) {
-            if (!comp.containsKey(participant[i]) || comp.get(participant[i]) == 0) {
-                return participant[i];
+        
+        for (String person : participant) {
+            if (!completionMap.containsKey(person)) {
+                return person;
             } else {
-                comp.put(participant[i], comp.get(participant[i]) - 1);
+                completionMap.compute(person, (k, v) -> v == 1 ? null : v - 1);
             }
         }
-
+        
         return "";
     }
 }
