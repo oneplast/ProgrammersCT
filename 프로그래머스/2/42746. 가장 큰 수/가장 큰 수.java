@@ -1,15 +1,15 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
     public String solution(int[] numbers) {
-        StringBuilder sb = new StringBuilder();
-        String[] arr = Arrays.stream(numbers).mapToObj(String::valueOf).toArray(String[]::new);
-        Arrays.sort(arr, (a, b) -> (b + a).compareTo(a + b));
+        String[] strNumbers = Arrays.stream(numbers).mapToObj(String::valueOf).toArray(String[]::new);
 
-        for (String str : arr) {
-            sb.append(str);
-        }
+        PriorityQueue<String> pq = new PriorityQueue<>((a, b) -> (b + a).compareTo(a + b));
+        Collections.addAll(pq, strNumbers);
 
-        return sb.toString().startsWith("0") ? "0" : sb.toString();
+        String result = Stream.generate(pq::poll).limit(pq.size()).collect(Collectors.joining());
+
+        return result.startsWith("0") ? "0" : result;
     }
 }
