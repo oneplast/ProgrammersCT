@@ -3,18 +3,17 @@ import java.util.stream.*;
 
 class Solution {
     public int solution(int[] nums) {
-        int answer = nums.length / 2;
+        int size = nums.length / 2;
 
-        Map<Integer, Integer> map = Arrays.stream(nums)
+        int numsKeySize = Arrays.stream(nums)
                 .boxed()
                 .collect(Collectors.toMap(
-                        num -> num,
-                        num -> 1,
+                        key -> key,
+                        value -> 1,
                         Integer::sum
-                ));
+                ))
+                .keySet().size();
 
-        int max = map.keySet().size();
-
-        return Math.min(max, answer);
+        return Math.min(numsKeySize, size);
     }
 }
