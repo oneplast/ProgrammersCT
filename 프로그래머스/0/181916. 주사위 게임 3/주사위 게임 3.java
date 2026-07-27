@@ -1,36 +1,34 @@
 import java.util.*;
-import java.util.stream.*;
 
 class Solution {
     public int solution(int a, int b, int c, int d) {
-        List<Integer> list = Arrays.asList(a, b, c, d)
-                .stream()
-                .collect(Collectors.groupingBy(x -> x, Collectors.counting()))
-                .entrySet()
-                .stream()
-                .sorted((x, y) -> Long.compare(y.getValue(), x.getValue()))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+        Map<Integer, Integer> map = new HashMap<>();
+		map.merge(a, 1, Integer::sum);
+		map.merge(b, 1, Integer::sum);
+		map.merge(c, 1, Integer::sum);
+		map.merge(d, 1, Integer::sum);
+		List<int[]> list = new ArrayList<>();
+		map.forEach((key, value) -> list.add(new int[] {key, value}));
 
-        List<Integer> sortedList = Arrays.asList(a, b, c, d)
-                .stream()
-                .sorted()
-                .collect(Collectors.toList());
+		list.sort((f, s) -> s[1] - f[1]);
 
-        if (list.size() == 4) {
-            return sortedList.stream().min(Comparator.naturalOrder()).get();
-        } else if (list.size() == 3) {
-            return list.get(1) * list.get(2);
-        } else if (list.size() == 2) {
-            if (!Objects.equals(sortedList.get(1), sortedList.get(2))) {
-                int p = list.get(0);
-                int q = list.get(1);
-                return (p + q) * Math.abs(p - q);
-            } else {
-                return (int) Math.pow((10 * list.get(0) + list.get(1)), 2);
-            }
-        } else {
-            return 1111 * list.get(0);
-        }
+		int size = list.size();
+
+		switch (size) {
+			case 1:
+				return 1111 * list.get(0)[0];
+			case 2:
+				int first = list.get(0)[0];
+				int second = list.get(1)[0];
+				if (list.get(1)[1] == 2) {
+					return (first + second) * Math.abs(first - second);
+				} else {
+					return (int) Math.pow(10 * list.get(0)[0] + list.get(1)[0], 2);
+				}
+			case 3:
+				return list.get(1)[0] * list.get(2)[0];
+			default:
+				return list.stream().mapToInt(n -> n[0]).min().getAsInt();
+		}
     }
 }
