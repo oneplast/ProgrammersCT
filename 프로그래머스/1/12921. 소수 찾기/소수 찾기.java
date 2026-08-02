@@ -1,19 +1,21 @@
-import java.util.stream.*;
-
 class Solution {
-    public int solution(int n) {
-        return (int) IntStream.rangeClosed(2, n)
-                .filter(this::isPrime)
-                .count();
-    }
+	public int solution(int n) {
+		int result = 0;
+		boolean isPrime;
+		for (int i = 2; i <= n; i++) {
+			isPrime = true;
+			for (int j = 2; j * j <= i; j++) {
+				if (i % j == 0) {
+					isPrime = false;
+					break;
+				}
+			}
 
-    public boolean isPrime(int n) {
-        for (int i = 2; i <= Math.sqrt(n); i++) {
-            if (n % i == 0) {
-                return false;
-            }
-        }
+			if (isPrime) {
+				result++;
+			}
+		}
 
-        return true;
-    }
+		return result;
+	}
 }
