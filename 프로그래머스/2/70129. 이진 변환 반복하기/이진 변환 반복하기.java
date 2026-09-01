@@ -1,17 +1,19 @@
 class Solution {
-    public int[] solution(String s) {
-        int[] answer = new int[2];
+	public int[] solution(String s) {
+		int[] results = new int[2];
 
-        while (!s.equals("1")) {
-            int len = s.length();
-            s = s.replace("0", "");
-            int newLen = s.length();
+		int preLen;
+		int curLen;
+		while (!s.equals("1")) {
+			preLen = s.length();
+			s = s.replace("0", "");
+			curLen = s.length();
+			s = Integer.toBinaryString(curLen);
 
-            s = Integer.toBinaryString(newLen);
-            answer[0]++;
-            answer[1] += len- newLen;
-        }
+			results[0]++;
+			results[1] += preLen - curLen;
+		}
 
-        return answer;
-    }
+		return results;
+	}
 }
