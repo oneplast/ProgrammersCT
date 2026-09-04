@@ -2,27 +2,22 @@ import java.util.*;
 
 class Solution {
     public int solution(String s) {
-        Stack<Character> stack = new Stack<>();
+        Deque<Character> deque = new ArrayDeque<>();
 
-        int idx = 0;
-        while (idx < s.length()) {
-            char ch = s.charAt(idx);
-            if (stack.isEmpty()) {
-                stack.push(ch);
-                idx++;
-                continue;
+        char ch;
+        for (int i = 0; i < s.length(); i++) {
+            ch = s.charAt(i);
+
+            if (!deque.isEmpty() && deque.peekLast() == ch) {
+                char preCh = deque.pollLast();
+                while (!deque.isEmpty() && deque.peekLast() == preCh) {
+                    preCh = deque.pollLast();
+                }
+            } else {
+                deque.offerLast(ch);
             }
-
-            if (stack.peek() == ch) {
-                stack.pop();
-                idx++;
-                continue;
-            }
-
-            stack.push(ch);
-            idx++;
         }
 
-        return stack.isEmpty() ? 1 : 0;
+        return deque.isEmpty() ? 1 : 0;
     }
 }
