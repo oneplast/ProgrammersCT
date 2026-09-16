@@ -1,22 +1,24 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(int k, int[] score) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        List<Integer> answer = new ArrayList<>();
+	public int[] solution(int k, int[] score) {
+		int[] results = new int[score.length];
+		PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.naturalOrder());
 
-        for (int data : score) {
-            if (pq.size() >= k) {
-                if (data > pq.peek()) {
-                    pq.poll();
-                    pq.offer(data);
-                }
-            } else {
-                pq.offer(data);
-            }
-            answer.add(pq.peek());
-        }
+		int curIdx = 0;
+		for (int scoreOfDay : score) {
+			if (pq.size() < k) {
+				pq.offer(scoreOfDay);
+			} else {
+				if (pq.peek() < scoreOfDay) {
+					pq.poll();
+					pq.offer(scoreOfDay);
+				}
+			}
 
-        return answer.stream().mapToInt(x -> x).toArray();
-    }
+			results[curIdx++] = pq.peek();
+		}
+
+		return results;
+	}
 }
