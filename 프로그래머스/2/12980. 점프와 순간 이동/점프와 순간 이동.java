@@ -1,16 +1,22 @@
+import java.util.*;
+
 class Solution {
-    public int solution(int n) {
-        if (n == 1) {
-            return 1;
-        }
+	public int solution(int n) {
+		Queue<int[]> queue = new ArrayDeque<>();
+		queue.offer(new int[] {n, 0});
 
-        int result;
-        if (n % 2 == 0) {
-            result = solution(n / 2);
-        } else {
-            result = solution((n - 1) / 2) + 1;
-        }
+		while (!queue.isEmpty()) {
+			int[] cur = queue.poll();
+			int curN = cur[0];
+			int dist = cur[1];
 
-        return result;
-    }
+			if (curN == 0) {
+				return dist;
+			}
+
+			queue.offer(curN % 2 == 0 ? new int[] {curN / 2, dist} : new int[] {curN - 1, dist + 1});
+		}
+
+		return -1;
+	}
 }
