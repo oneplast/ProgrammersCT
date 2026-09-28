@@ -1,14 +1,16 @@
 class Solution {
-    public int solution(int n, int a, int b) {
-        int cnt = 0;
+	public int solution(int n, int a, int b) {
+		int result = 0;
 
-        while (a != b) {
-            a = (a + 1) / 2;
-            b = (b + 1) / 2;
+		while (true) {
+			a = (a + 1) / 2;
+			b = (b + 1) / 2;
 
-            cnt++;
-        }
+			result++;
 
-        return cnt;
-    }
+			if (a == b) {
+				return result;
+			}
+		}
+	}
 }
