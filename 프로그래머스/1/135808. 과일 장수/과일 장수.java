@@ -2,7 +2,7 @@ import java.util.*;
 
 class Solution {
     public int solution(int k, int m, int[] score) {
-        int answer = 0;
+        int result = 0;
 
         int[] arr = Arrays.stream(score)
                 .sorted()
@@ -10,9 +10,9 @@ class Solution {
                 .toArray();
 
         for (int i = 0; i < arr.length; i += m) {
-            answer += arr[i] * m;
+            result += arr[i] * m;
         }
 
-        return answer;
+        return result;
     }
 }
