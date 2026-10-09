@@ -1,21 +1,22 @@
-import java.util.*;
 import java.util.stream.*;
 
 class Solution {
-    public int solution(int number, int limit, int power) {
-        int[] arr = IntStream.rangeClosed(1, number).map(x -> {
-            int cnt = 0;
-            for (int i = 1; i * i <= x; i++) {
-                if (i * i == x) cnt++;
-                else if (x % i == 0) cnt += 2;
-            }
+	public int solution(int number, int limit, int power) {
+		return IntStream.rangeClosed(1, number)
+			.map(this::getDivisor)
+			.map(atk -> atk > limit ? power : atk)
+			.sum();
 
-            return cnt;
-        }).toArray();
+	}
 
-        return Arrays.stream(arr).map(x -> {
-            if (x >limit) x = power;
-            return x;
-        }).sum();
-    }
+	private int getDivisor(int num) {
+		int divisorCnt = 0;
+		for (int i = 1; i <= Math.sqrt(num); i++) {
+			if (num % i == 0) {
+				divisorCnt = i == num / i ? divisorCnt + 1 : divisorCnt + 2;
+			}
+		}
+
+		return divisorCnt;
+	}
 }
