@@ -1,15 +1,14 @@
+import java.util.*;
+
 class Solution {
     public int solution(int[] wallet, int[] bill) {
         int answer = 0;
-        
-        while ((bill[0] > wallet[0] || bill[1] > wallet[1])
-              && (bill[0] > wallet[1] || bill[1] > wallet[0])) {
-            if (bill[0] >= bill[1]) {
-                bill[0] /= 2;
-            } else {
-                bill[1] /= 2;
-            }
+        Arrays.sort(wallet);
 
+        while (Math.min(bill[0], bill[1]) > wallet[0]
+                || Math.max(bill[0], bill[1]) > wallet[1]
+        ) {
+            bill[bill[0] > bill[1] ? 0 : 1] /= 2;
             answer++;
         }
 
