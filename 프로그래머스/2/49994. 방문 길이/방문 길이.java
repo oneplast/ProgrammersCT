@@ -1,39 +1,45 @@
 import java.util.*;
 
 class Solution {
-    public int solution(String dirs) {
-        int answer = 0;
-        int x = 0, y = 0;
-        Map<Character, int[]> map = new HashMap<>();
-        map.put('L', new int[]{0, -1});
-        map.put('R', new int[]{0, 1});
-        map.put('U', new int[]{1, 0});
-        map.put('D', new int[]{-1, 0});
+	static final int LIMIT = 5;
 
-        Set<String> set = new HashSet<>();
+	public int solution(String dirs) {
+		Set<String> visited = new HashSet<>();
+		int x = 0, y = 0;
+		for (String dir : dirs.split("")) {
+			int nextX = x;
+			int nextY = y;
 
-        for (Character dir : dirs.toCharArray()) {
-            int[] newDirs = map.get(dir);
-            int nextX = x + newDirs[1];
-            int nextY = y + newDirs[0];
+			switch (dir) {
+				case "U":
+					nextY--;
+					break;
+				case "D":
+					nextY++;
+					break;
+				case "R":
+					nextX++;
+					break;
+				case "L":
+					nextX--;
+					break;
+			}
 
-            if (nextX < -5 || nextX > 5 || nextY < -5 || nextY > 5) {
-                continue;
-            }
+			if (nextX > LIMIT || nextX < -LIMIT || nextY > LIMIT || nextY < -LIMIT) {
+				continue;
+			}
 
-            String path1 = "" + y + x + nextY + nextX;
-            String path2 = "" + nextY + nextX + y + x;
-            if (!set.contains(path1)) {
-                set.add(path1);
-                set.add(path2);
-                answer++;
-            }
+			String pathTo = "" + x + y + nextX + nextY;
+			String pathFrom = "" + nextX + nextY + x + y;
 
-            x = nextX;
-            y = nextY;
-        }
+			if (!visited.contains(pathTo) && !visited.contains(pathFrom)) {
+				visited.add(pathTo);
+			}
 
-        return answer;
-    }
+			x = nextX;
+			y = nextY;
+		}
+
+		return visited.size();
+	}
 }
-
