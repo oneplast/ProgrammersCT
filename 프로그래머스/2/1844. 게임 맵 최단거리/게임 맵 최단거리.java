@@ -1,38 +1,40 @@
 import java.util.*;
 
 class Solution {
-    int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
-    public int solution(int[][] maps) {
-        int n = maps.length;
-        int m = maps[0].length;
-        Queue<int[]> q = new LinkedList<>();
-        boolean[][] visited = new boolean[n][m];
-        q.offer(new int[]{0, 0, 1});
-        visited[0][0] = true;
+	public int solution(int[][] maps) {
+		int n = maps.length;
+		int m = maps[0].length;
 
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
-            int x = cur[0];
-            int y = cur[1];
-            int cnt = cur[2];
+		boolean[][] visited = new boolean[n][m];
+		visited[0][0] = true;
 
-            if (y == n - 1 && x == m - 1) {
-                return cnt;
-            }
+		Queue<int[]> queue = new ArrayDeque<>();
+		queue.offer(new int[] {0, 0, 1});
+		while (!queue.isEmpty()) {
+			int[] cur = queue.poll();
+			int x = cur[0];
+			int y = cur[1];
+			int moveCnt = cur[2];
 
-            for (int[] dir : dirs) {
-                int nextX = cur[0] + dir[1];
-                int nextY = cur[1] + dir[0];
+			if (x == n - 1 && y == m - 1) {
+				return moveCnt;
+			}
 
-                if (nextX >= 0 && nextX < m && nextY >= 0 && nextY < n
-                        && !visited[nextY][nextX] && maps[nextY][nextX] == 1) {
-                    q.add(new int[]{nextX, nextY, cnt + 1});
-                    visited[nextY][nextX] = true;
-                }
-            }
-        }
+			for (int[] dir : dirs) {
+				int nextX = x + dir[0];
+				int nextY = y + dir[1];
 
-        return -1;
-    }
+				if (nextX >= 0 && nextX < n && nextY >= 0 && nextY < m
+					&& !visited[nextX][nextY] && maps[nextX][nextY] == 1
+				) {
+					visited[nextX][nextY] = true;
+					queue.offer(new int[] {nextX, nextY, moveCnt + 1});
+				}
+			}
+		}
+
+		return -1;
+	}
 }
