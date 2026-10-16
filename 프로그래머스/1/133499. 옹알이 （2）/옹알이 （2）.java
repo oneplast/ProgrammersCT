@@ -1,39 +1,32 @@
 import java.util.*;
 
 class Solution {
-    public int solution(String[] babbling) {
-        int result = 0;
-        Set<String> set = new HashSet<>(Arrays.asList("aya", "ye", "woo", "ma"));
+	public int solution(String[] babbling) {
+		Set<String> announceSet = new HashSet<>(Arrays.asList("aya", "ye", "woo", "ma"));
 
-        int idx = 0;
-        while (idx < babbling.length) {
-            String curStr = babbling[idx];
+		int result = 0;
+		for (String word : babbling) {
+			String prevAnnounce = "";
 
-            String prevStr = "";
-            loop:
-            while (true) {
-                for (String setStr : set) {
-                    if (curStr.startsWith(setStr)) {
-                        if (setStr.equals(prevStr)) {
-                            break loop;
-                        }
+			boolean breakFlag = false;
+			while (!word.isEmpty() && !breakFlag) {
+				for (String announce : announceSet) {
+					if (word.startsWith(announce) && !prevAnnounce.equals(announce)) {
+						word = word.substring(announce.length());
+						prevAnnounce = announce;
+						breakFlag = false;
+						break;
+					} else {
+						breakFlag = true;
+					}
+				}
+			}
 
-                        curStr = curStr.substring(setStr.length());
-                        prevStr = setStr;
-                        continue loop;
-                    }
-                }
+			if (word.isEmpty()) {
+				result++;
+			}
+		}
 
-                break;
-            }
-
-            if (curStr.isEmpty()) {
-                result++;
-            }
-
-            idx++;
-        }
-
-        return result;
-    }
+		return result;
+	}
 }
