@@ -1,30 +1,28 @@
 import java.util.*;
 
 class Solution {
-    public int solution(int[] numbers, int target) {
-        Queue<Integer> queue = new LinkedList<>();
-        Queue<Integer> subQueue = new LinkedList<>();
-        Arrays.stream(numbers).forEach(queue::offer);
+	public int solution(int[] numbers, int target) {
+		Queue<Integer> queue = new ArrayDeque<>();
+		queue.offer(0);
 
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
+		for (int number : numbers) {
+			int size = queue.size();
 
-            if (subQueue.isEmpty()) {
-                subQueue.offer(cur);
-                subQueue.offer(-cur);
-                continue;
-            }
+			for (int i = 0; i < size; i++) {
+				int value = queue.poll();
 
-            int idx = 0;
-            int len = subQueue.size();
-            while (idx < len) {
-                int data = subQueue.poll();
-                subQueue.offer(data + cur);
-                subQueue.offer(data - cur);
-                idx++;
-            }
-        }
+				queue.offer(value + number);
+				queue.offer(value - number);
+			}
+		}
 
-        return (int) subQueue.stream().filter(x -> x == target).count();
-    }
+		int result = 0;
+		while (!queue.isEmpty()) {
+			if (queue.poll() == target) {
+				result++;
+			}
+		}
+
+		return result;
+	}
 }
