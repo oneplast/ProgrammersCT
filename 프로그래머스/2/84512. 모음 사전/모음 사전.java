@@ -1,38 +1,32 @@
-import java.util.*;
-
 class Solution {
+    String[] candidates = {"A", "E", "I", "O", "U"};
+    int cnt = 0;
     int result;
 
     public int solution(String word) {
-        result = 0;
-
-        List<Character> words = new ArrayList<>(Arrays.asList('A', 'E', 'I', 'O', 'U'));
-        StringBuilder sb = new StringBuilder();
-
-        dfs(word, sb, words);
+        dfs(new StringBuilder(), word);
 
         return result;
     }
 
-    public boolean dfs(String word, StringBuilder sb, List<Character> words) {
+    private void dfs(StringBuilder sb, String word) {
         if (sb.toString().equals(word)) {
-            return true;
+            result = cnt;
+            return;
         }
 
-        if (sb.length() >= 5) {
-            return false;
+        if (sb.length() >= candidates.length) {
+            return;
         }
 
-        for (char c : words) {
-            sb.append(c);
-            result++;
-            if (dfs(word, sb, words)) {
-                return true;
-            }
-
+        for (String candidate : candidates) {
+            cnt++;
+            dfs(sb.append(candidate), word);
             sb.deleteCharAt(sb.length() - 1);
-        }
 
-        return false;
+            if (result > 0) {
+                return;
+            }
+        }
     }
 }
