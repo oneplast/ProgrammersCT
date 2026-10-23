@@ -1,50 +1,46 @@
 import java.util.*;
 
 class Solution {
-    static final int MUL = 65536;
+	private static final int MULTIPLE = 65536;
 
-    public int solution(String str1, String str2) {
-        List<String> list1 = new ArrayList<>();
-        List<String> list2 = new ArrayList<>();
+	public int solution(String str1, String str2) {
+		Map<String, Integer> countMap1 = new HashMap<>();
+		Map<String, Integer> countMap2 = new HashMap<>();
+		fillMap(countMap1, str1);
+		fillMap(countMap2, str2);
 
-        for (int i = 0; i < str1.length() - 1; i++) {
-            char ch1 = str1.charAt(i);
-            char ch2 = str1.charAt(i + 1);
+		int intersectionCnt = 0;
+		for (String key1 : countMap1.keySet()) {
+			if (countMap2.containsKey(key1)) {
+				intersectionCnt += Math.min(countMap1.get(key1), countMap2.get(key1));
+			}
+		}
+		int unionCnt = getUnionCnt(countMap1) + getUnionCnt(countMap2) - intersectionCnt;
 
-            if (Character.isLetter(ch1) && Character.isLetter(ch2)) {
-                list1.add((String.valueOf(ch1) + String.valueOf(ch2)).toLowerCase());
-            }
-        }
+		if (unionCnt == 0) {
+			return MULTIPLE;
+		}
 
-        for (int i = 0; i < str2.length() - 1; i++) {
-            char ch1 = str2.charAt(i);
-            char ch2 = str2.charAt(i + 1);
+		return getJaccard(intersectionCnt, unionCnt);
+	}
 
-            if (Character.isLetter(ch1) && Character.isLetter(ch2)) {
-                list2.add((String.valueOf(ch1) + String.valueOf(ch2)).toLowerCase());
-            }
-        }
+	private void fillMap(Map<String, Integer> map, String str) {
+		String key;
+		for (int i = 0; i < str.length() - 1; i++) {
+			key = str.substring(i, i + 2);
 
-        int union = list1.size() + list2.size();
-        int intersection = 0;
+			if (key.matches("[a-zA-Z]{2}")) {
+				key = key.toLowerCase();
+				map.put(key, map.getOrDefault(key, 0) + 1);
+			}
+		}
+	}
 
-        int idx = 0;
-        while (idx < list1.size()) {
-            String str = list1.get(idx);
+	private int getUnionCnt(Map<String, Integer> map) {
+		return map.values().stream().reduce(0, Integer::sum);
+	}
 
-            if (list2.contains(str)) {
-                list1.remove(str);
-                list2.remove(str);
-                intersection++;
-            } else {
-                idx++;
-            }
-        }
-
-        union -= intersection;
-
-        return intersection == 0 ?
-                union == 0 ? MUL : 0
-                : (int) Math.floor(((double) intersection / union) * MUL);
-    }
+	private int getJaccard(int intersectionCnt, int unionCnt) {
+		return (int) (((float) intersectionCnt / unionCnt) * MULTIPLE);
+	}
 }
