@@ -2,35 +2,30 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] operations) {
-        TreeSet<Integer> set = new TreeSet<>(Collections.reverseOrder());
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
 
+        String[] bits;
+        String op;
+        int num, max;
         for (String operation : operations) {
-            String[] splitBits = operation.split(" ");
-            String oper = splitBits[0];
-            int value = Integer.parseInt(splitBits[1]);
+            bits = operation.split(" ");
+            op = bits[0];
+            num = Integer.parseInt(bits[1]);
 
-            if (oper.equals("I")) {
-                set.add(value);
-            } else {
-                if (value == 1) {
-                    if (!set.isEmpty()) {
-                        set.pollFirst();
-                    }
+            if (op.equals("I")) {
+                pq.offer(num);
+            } else if (!pq.isEmpty()) {
+                if (num == -1) {
+                    pq.poll();
                 } else {
-                    if (!set.isEmpty()) {
-                        set.pollLast();
-                    }
+                    max = Collections.max(pq);
+                    pq.remove(max);
                 }
             }
         }
 
-        if (set.isEmpty()) {
-            return new int[]{0, 0};
-        } else if (set.size() < 2) {
-            int data = set.pollFirst();
-            return new int[]{data, data};
-        }
-
-        return new int[]{set.pollFirst(), set.pollLast()};
+        return pq.isEmpty()
+                ? new int[]{0, 0}
+                : new int[]{Collections.max(pq), pq.peek()};
     }
 }
