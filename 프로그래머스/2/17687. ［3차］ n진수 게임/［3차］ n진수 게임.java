@@ -1,29 +1,22 @@
 class Solution {
-    public String solution(int n, int t, int m, int p) {
-        StringBuilder sb = new StringBuilder();
+	public String solution(int n, int t, int m, int p) {
+		StringBuilder dpSb = new StringBuilder();
 
-        int turn = 0;
-        int idx = 0;
-        while (true) {
-            String curStr = Integer.toString(idx, n);
+		for (int i = 0; i <= t * m; i++) {
+			dpSb.append(Integer.toString(i, n).toUpperCase());
+		}
 
-            int splitIdx = 0;
-            while (splitIdx < curStr.length()) {
-                if (sb.length() == t) {
-                    return sb.toString();
-                }
+		String[] dpBits = dpSb.toString().split("");
+		StringBuilder resultSb = new StringBuilder();
 
-                turn++;
-                if (turn == p) {
-                    String upperString = String.valueOf(curStr.charAt(splitIdx)).toUpperCase();
-                    sb.append(upperString);
-                }
+		int startIdx = p - 1;
+		int loopCnt = 0;
+		while (loopCnt < t) {
+			resultSb.append(dpBits[startIdx]);
+			startIdx += m;
+			loopCnt++;
+		}
 
-                turn %= m;
-                splitIdx++;
-            }
-
-            idx++;
-        }
-    }
+		return resultSb.toString();
+	}
 }
