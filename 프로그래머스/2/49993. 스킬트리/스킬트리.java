@@ -1,39 +1,30 @@
 import java.util.*;
 
 class Solution {
-    public int solution(String skill, String[] skill_trees) {
-        int answer = 0;
-        List<String> skills = Arrays.asList(skill.split(""));
+	public int solution(String skill, String[] skill_trees) {
+		Set<String> skillSet = new HashSet<>(Arrays.asList(skill.split("")));
+		String[] skillOrders = skill.split("");
 
-        int preIdx;
-        for (String skill_tree : skill_trees) {
-            preIdx = 0;
-            boolean isPossible = true;
-            String[] splitBits = skill_tree.split("");
+		int result = 0;
+		for (int i = 0; i < skill_trees.length; i++) {
+			int curIdx = 0;
+			boolean isPossible = true;
+			for (String curSkill : skill_trees[i].split("")) {
+				if (skillSet.contains(curSkill)) {
+					if (!skillOrders[curIdx].equals(curSkill)) {
+						isPossible = false;
+						break;
+					}
 
-            for (int i = 0; i < splitBits.length; i++) {
-                if (skills.contains(splitBits[i])) {
-                    String preStr = skills.get(preIdx);
+					curIdx++;
+				}
+			}
 
-                    if (!skill_tree.contains(preStr)) {
-                        isPossible = false;
-                        break;
-                    }
+			if (isPossible) {
+				result++;
+			}
+		}
 
-                    if (skill_tree.indexOf(preStr) > skill_tree.indexOf(splitBits[i])) {
-                        isPossible = false;
-                        break;
-                    }
-
-                    preIdx++;
-                }
-            }
-
-            if (isPossible) {
-                answer++;
-            }
-        }
-
-        return answer;
-    }
+		return result;
+	}
 }
