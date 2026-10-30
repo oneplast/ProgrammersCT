@@ -1,34 +1,30 @@
 import java.util.*;
 
 class Solution {
+    static final int LOSER = 6;
+
     public int[] solution(int[] lottos, int[] win_nums) {
-        Map<Integer, Integer> rank = new HashMap<>();
-        Map<Integer, Integer> myLotto = new HashMap<>();
-        rank.put(6, 1);
-        rank.put(5, 2);
-        rank.put(4, 3);
-        rank.put(3, 4);
-        rank.put(2, 5);
-        rank.put(1, 6);
-        rank.put(0, 6);
+        Set<Integer> winSet = new HashSet<>();
+        Arrays.stream(win_nums).forEach(winSet::add);
 
-        int zeroCnt = 0;
-        for (int i = 0; i < lottos.length; i++) {
-            if (lottos[i] == 0) {
-                zeroCnt++;
-                continue;
-            }
+        Map<Integer, Integer> rankMap = new HashMap<>();
+        rankMap.put(6, 1);
+        rankMap.put(5, 2);
+        rankMap.put(4, 3);
+        rankMap.put(3, 4);
+        rankMap.put(2, 5);
 
-            myLotto.put(lottos[i], lottos[i]);
-        }
+        int zeroCnt = (int) Arrays.stream(lottos)
+                .filter(i -> i == 0)
+                .count();
 
-        int correct = 0;
-        for (int i = 0; i < win_nums.length; i++) {
-            if (myLotto.containsKey(win_nums[i])) {
-                correct++;
-            }
-        }
+        int collectCnt = (int) Arrays.stream(lottos)
+                .filter(winSet::contains)
+                .count();
 
-        return new int[]{rank.get(correct + zeroCnt), rank.get(correct)};
+        int min = collectCnt;
+        int max = collectCnt + zeroCnt;
+
+        return new int[]{rankMap.getOrDefault(max, LOSER), rankMap.getOrDefault(min, LOSER)};
     }
 }
