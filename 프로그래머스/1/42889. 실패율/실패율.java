@@ -1,45 +1,28 @@
 import java.util.*;
-import java.util.stream.*;
 
 class Solution {
-    public int[] solution(int N, int[] stages) {
-        int total = stages.length;
-        Map<Integer, Integer> map = new HashMap<>();
-        Arrays.stream(stages).forEach(x -> map.put(x, map.getOrDefault(x, 0) + 1));
-        Data[] data = new Data[N];
+	public int[] solution(int N, int[] stages) {
+		int[] failStage = new int[N + 2];
+		Arrays.stream(stages).forEach(i -> failStage[i]++);
 
-        for (int i = 1; i <= N; i++) {
-            if (map.containsKey(i)) {
-                data[i - 1] = new Data(i, (double) map.get(i) / total);
-                total -= map.get(i);
-            } else {
-                data[i - 1] = new Data(i, 0);
-            }
-        }
+		PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+			if (failRate(a[1], a[2]) == failRate(b[1], b[2])) {
+				return Integer.compare(a[0], b[0]);
+			} else {
+				return Float.compare(failRate(b[1], b[2]), failRate(a[1], a[2]));
+			}
+		});
 
-        Arrays.sort(data);
+		int remainTotal = stages.length;
+		for (int i = 1; i <= N; i++) {
+			pq.offer(new int[] {i, failStage[i], remainTotal});
+			remainTotal -= failStage[i];
+		}
 
-        return Arrays.stream(data)
-                .mapToInt(x -> x.stage)
-                .toArray();
-    }
-}
+		return pq.stream().sorted(pq.comparator()).mapToInt(i -> i[0]).toArray();
+	}
 
-class Data implements Comparable<Data> {
-    int stage;
-    double rate;
-
-    public Data(int stage, double rate) {
-        this.stage = stage;
-        this.rate = rate;
-    }
-
-    @Override
-    public int compareTo(Data o) {
-        if (this.rate == o.rate) {
-            return this.stage - o.stage;
-        }
-
-        return Double.compare(o.rate, this.rate);
-    }
+	private float failRate(int failCnt, int total) {
+		return total == 0 ? 0 : (float) failCnt / total;
+	}
 }
