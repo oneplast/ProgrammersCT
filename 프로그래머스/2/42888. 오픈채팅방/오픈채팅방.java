@@ -1,31 +1,40 @@
 import java.util.*;
 
 class Solution {
-    public String[] solution(String[] record) {
-        List<String> result = new ArrayList<>();
-        Map<String, String> map = new HashMap<>();
+	static final String ENTER = "Enter";
+	static final String LEAVE = "Leave";
+	static final String CHANGE = "Change";
+	static final String ENTER_CMD = "님이 들어왔습니다.";
+	static final String LEAVE_CMD = "님이 나갔습니다.";
 
-        for (String line : record) {
-            String[] splitBits = line.split(" ");
-            if (splitBits[0].equals("Enter") || splitBits[0].equals("Change")) {
-                map.put(splitBits[1], splitBits[2]);
-            }
-        }
+	public String[] solution(String[] record) {
+		Map<String, String> idMap = new HashMap<>();
 
-        String command = "";
-        String id = "";
-        for (int i = 0; i < record.length; i++) {
-            String[] splitBits = record[i].split(" ");
-            command = splitBits[0];
-            id = splitBits[1];
+		String[] cmdBits;
+		String cmd, id;
+		for (String cmds : record) {
+			cmdBits = cmds.split("\\s+");
+			cmd = cmdBits[0];
+			id = cmdBits[1];
 
-            if (command.equals("Enter")) {
-                result.add(map.get(id) + "님이 들어왔습니다.");
-            } else if (command.equals("Leave")) {
-                result.add(map.get(id) + "님이 나갔습니다.");
-            }
-        }
+			if (cmd.equals(ENTER) || cmd.equals(CHANGE)) {
+				idMap.put(id, cmdBits[2]);
+			}
+		}
 
-        return result.toArray(new String[0]);
-    }
+		List<String> results = new ArrayList<>();
+		for (int i = 0; i < record.length; i++) {
+			cmdBits = record[i].split("\\s+");
+			cmd = cmdBits[0];
+			id = cmdBits[1];
+
+			if (cmd.equals(ENTER)) {
+				results.add(idMap.get(id) + ENTER_CMD);
+			} else if (cmd.equals(LEAVE)) {
+				results.add(idMap.get(id) + LEAVE_CMD);
+			}
+		}
+
+		return results.toArray(new String[0]);
+	}
 }
