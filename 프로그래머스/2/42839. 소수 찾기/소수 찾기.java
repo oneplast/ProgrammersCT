@@ -1,59 +1,57 @@
 import java.util.*;
 
 class Solution {
-    Set<Integer> set;
-    boolean[] visited;
-    StringBuilder sb;
+    static final int LIMIT = 10_000_000;
+
+    private Set<Integer> candidateSet;
+    private boolean[] isComposite;
+    private boolean[] visited;
+
+    private final StringBuilder sb = new StringBuilder();
 
     public int solution(String numbers) {
-        int result = 0;
-        set = new HashSet<>();
-        int n = numbers.length();
-        visited = new boolean[n];
-        sb = new StringBuilder();
+        candidateSet = new HashSet<>();
+        isComposite = new boolean[LIMIT];
+        visited = new boolean[numbers.length()];
 
-        dfs(numbers, n);
+        fillPrime();
 
-        for (int num : set) {
-            if (isPrime(num)) {
-                result++;
-            }
-        }
+        dfs(numbers, 0);
 
-        return result;
+        return (int) candidateSet.stream()
+                .filter(i -> i >= 2 && !isComposite[i])
+                .count();
     }
 
-    private void dfs(String numbers, int n) {
-        if (!sb.toString().isEmpty()) {
-            set.add(Integer.parseInt(sb.toString()));
+    private void fillPrime() {
+        for (int i = 2; i * i < LIMIT; i++) {
+            if (isComposite[i]) {
+                continue;
+            }
+
+            for (int j = i * i; j < LIMIT; j += i) {
+                isComposite[j] = true;
+            }
+        }
+    }
+
+    private void dfs(String numbers, int depth) {
+        if (sb.length() > 0) {
+            candidateSet.add(Integer.parseInt(sb.toString()));
         }
 
-        if (sb.length() >= n) {
+        if (depth >= numbers.length()) {
             return;
         }
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < numbers.length(); i++) {
             if (!visited[i]) {
                 visited[i] = true;
                 sb.append(numbers.charAt(i));
-                dfs(numbers, n);
+                dfs(numbers, depth + 1);
                 visited[i] = false;
                 sb.deleteCharAt(sb.length() - 1);
             }
         }
-    }
-
-    private boolean isPrime(int num) {
-        if (num <= 1) {
-            return false;
-        }
-
-        for (int i = 2; i <= Math.sqrt(num); i++) {
-            if (num % i == 0) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
