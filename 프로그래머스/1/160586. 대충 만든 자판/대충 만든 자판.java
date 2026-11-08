@@ -1,37 +1,45 @@
 import java.util.*;
 
 class Solution {
+    static final int ALPHA_SIZE = 26;
+
     public int[] solution(String[] keymap, String[] targets) {
-        int[] answer = new int[targets.length];
+        int[] dp = new int[ALPHA_SIZE];
+        Arrays.fill(dp, Integer.MAX_VALUE);
 
-        for (int i = 0; i < targets.length; i++) {
-            int sum = 0;
-
-            for (int j = 0; j < targets[i].length(); j++) {
-                int min = Integer.MAX_VALUE;
-
-                for (String keyBit : keymap) {
-                    String curStr = String.valueOf(targets[i].charAt(j));
-                    int curIdx = keyBit.indexOf(curStr) + 1;
-
-                    if (curIdx == 0) {
-                        continue;
-                    }
-
-                    min = Math.min(min, curIdx);
-                }
-
-                if (min == Integer.MAX_VALUE) {
-                    sum = -1;
-                    break;
-                }
-                
-                sum += min;
+        int alphaIdx;
+        char[] keyBits;
+        for (String keyStr : keymap) {
+            keyBits = keyStr.toCharArray();
+            for (int i = 0; i < keyBits.length; i++) {
+                alphaIdx = getAlphaIdx(keyBits, i);
+                dp[alphaIdx] = Math.min(dp[alphaIdx], i + 1);
             }
-
-            answer[i] = sum;
         }
 
-        return answer;
+        int n = targets.length;
+        int[] results = new int[n];
+        int curIdx = 0;
+        int cnt;
+        for (String targetStr : targets) {
+            keyBits = targetStr.toCharArray();
+            cnt = 0;
+            for (int i = 0; i < keyBits.length; i++) {
+                alphaIdx = getAlphaIdx(keyBits, i);
+                cnt = dp[alphaIdx] == Integer.MAX_VALUE ? -1 : cnt + dp[alphaIdx];
+
+                if (cnt == -1) {
+                    break;
+                }
+            }
+
+            results[curIdx++] = cnt;
+        }
+
+        return results;
+    }
+
+    private int getAlphaIdx(char[] keyBits, int idx) {
+        return keyBits[idx] - 'A';
     }
 }
