@@ -1,76 +1,57 @@
 import java.util.*;
 
 class Solution {
-    public String[] solution(String[] files) {
-        String[] result = new String[files.length];
-        PriorityQueue<Data> pq = new PriorityQueue<>();
-        for (int i = 0; i < files.length; i++) {
-            String file = files[i];
-            boolean findNumPrefix = false;
-            char[] chars = file.toCharArray();
+	public String[] solution(String[] files) {
+		PriorityQueue<String[]> pq = new PriorityQueue<>((a, b) -> {
+			String aHead = a[0].toUpperCase();
+			String bHead = b[0].toUpperCase();
 
-            int startIdx = 0;
-            int endIdx = -1;
+			if (aHead.equals(bHead)) {
+				int numCompare = Integer.compare(Integer.parseInt(a[1]), Integer.parseInt(b[1]));
 
-            for (int j = 0; j < chars.length; j++) {
-                if (Character.isDigit(chars[j])) {
-                    if (!findNumPrefix) {
-                        startIdx = j;
-                        findNumPrefix = true;
-                    }
-                } else if (findNumPrefix) {
-                    endIdx = j;
-                    break;
-                }
-            }
+				if (numCompare == 0) {
+					return Integer.compare(Integer.parseInt(a[3]), Integer.parseInt(b[3]));
+				}
 
-            if (endIdx == -1) {
-                endIdx = chars.length;
-            }
+				return numCompare;
+			} else {
+				return aHead.compareTo(bHead);
+			}
+		});
 
-            String head = file.substring(0, startIdx);
-            String number = file.substring(startIdx, endIdx);
-            String tail = file.substring(endIdx);
+		int curIdx = 0;
+		int headIdx, numberIdx;
+		for (String file : files) {
+			headIdx = 0;
+			char[] fileBits = file.toCharArray();
+			while (!Character.isDigit(fileBits[headIdx])) {
+				headIdx++;
+			}
 
-            pq.offer(new Data(head, number, tail, i));
-        }
+			numberIdx = headIdx;
+			while (numberIdx < file.length() && Character.isDigit(fileBits[numberIdx])) {
+				numberIdx++;
+			}
 
-        int idx = 0;
-        while (!pq.isEmpty()) {
-            Data data = pq.poll();
-            result[idx++] = data.head + data.number + data.tail;
-        }
+			pq.offer(new String[] {
+				file.substring(0, headIdx), file.substring(headIdx, numberIdx),
+				file.substring(numberIdx), String.valueOf(curIdx)
+			});
 
-        return result;
-    }
-}
+			curIdx++;
+		}
 
-class Data implements Comparable<Data> {
-    String head;
-    String number;
-    String tail;
-    int orgIdx;
+		String[] results = new String[files.length];
+		StringBuilder sb;
+		int resultIdx = 0;
+		while (!pq.isEmpty()) {
+			String[] cur = pq.poll();
+			sb = new StringBuilder();
+			sb.append(cur[0]).append(cur[1]).append(cur[2]);
 
-    public Data(String head, String number, String tail, int orgIdx) {
-        this.head = head;
-        this.number = number;
-        this.tail = tail;
-        this.orgIdx = orgIdx;
-    }
+			results[resultIdx++] = sb.toString();
+		}
 
-
-    @Override
-    public int compareTo(Data o) {
-        int headComp = this.head.compareToIgnoreCase(o.head);
-        if (headComp != 0) {
-            return headComp;
-        }
-
-        int numberComp = Integer.parseInt(this.number) - Integer.parseInt(o.number);
-        if (numberComp != 0) {
-            return numberComp;
-        }
-
-        return Integer.compare(this.orgIdx, o.orgIdx);
-    }
+		return results;
+	}
 }
