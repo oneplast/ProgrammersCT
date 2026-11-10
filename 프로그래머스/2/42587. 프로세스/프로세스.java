@@ -1,30 +1,40 @@
 import java.util.*;
-import java.util.stream.*;
 
 class Solution {
-    public int solution(int[] priorities, int location) {
-        Queue<int[]> queue = new LinkedList<>();
-        IntStream.range(0, priorities.length)
-                .forEach(i -> queue.offer(new int[]{priorities[i], i}));
+	static final int MAX = 9;
 
-        int cnt = 0;
-        while (!queue.isEmpty()) {
-            int[] cur = queue.poll();
+	public int solution(int[] priorities, int location) {
+		Queue<int[]> queue = new ArrayDeque<>();
+		int[] counts = new int[MAX + 1];
 
-            boolean flag = queue.stream()
-                    .anyMatch(data -> data[0] > cur[0]);
+		for (int i = 0; i < priorities.length; i++) {
+			queue.offer(new int[] {priorities[i], i});
+			counts[priorities[i]]++;
+		}
 
-            if (flag) {
-                queue.offer(cur);
-            } else {
-                cnt++;
+		int cnt = 0;
+		int max = MAX;
+		while (!queue.isEmpty()) {
+			while (counts[max] == 0) {
+				max--;
+			}
 
-                if (cur[1] == location) {
-                    return cnt;
-                }
-            }
-        }
+			int[] cur = queue.poll();
+			int num = cur[0];
+			int idx = cur[1];
 
-        return -1;
-    }
+			if (max > num) {
+				queue.offer(cur);
+			} else {
+				cnt++;
+				counts[num]--;
+
+				if (idx == location) {
+					return cnt;
+				}
+			}
+		}
+
+		return -1;
+	}
 }
