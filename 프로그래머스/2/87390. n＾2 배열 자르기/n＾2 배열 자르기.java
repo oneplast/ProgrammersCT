@@ -1,25 +1,16 @@
-import java.util.*;
-
 class Solution {
-    public int[] solution(int n, long left, long right) {
-        List<Long> list = new ArrayList<>();
+	public int[] solution(int n, long left, long right) {
+		int[] results = new int[(int) (right - left + 1)];
 
-        while (left <= right) {
-            long N = left / n;
-            long M = left % n;
+		for (int i = 0; i < results.length; i++) {
+			long idx = left + i;
 
-            long result;
+			int row = (int) (idx / n);
+			int col = (int) (idx % n);
 
-            if (N >= M) {
-                result = N + 1;
-            } else {
-                result = M + 1;
-            }
+			results[i] = Math.max(row, col) + 1;
+		}
 
-            list.add(result);
-            left++;
-        }
-
-        return list.stream().mapToInt(Long::intValue).toArray();
-    }
+		return results;
+	}
 }
