@@ -1,31 +1,15 @@
 class Solution {
     public int solution(int n, int m, int[] section) {
         int result = 0;
-        int max = section[section.length - 1];
+        int filled = 0;
 
-        int i = 0;
-        while (i < section.length) {
-            int left = section[i];
-            int right = left + m - 1;
-            result++;
-
-            while (right <= n) {
-                if (right >= section[i]) {
-                    i++;
-                } else {
-                    break;
-                }
-
-                if (i >= section.length) {
-                    return result;
-                }
-            }
-
-            if (right >= max) {
-                return result;
+        for (int part : section) {
+            if (part > filled) {
+                result++;
+                filled = part + m - 1;
             }
         }
 
-        return -1;
+        return result;
     }
 }
