@@ -6,10 +6,7 @@ class Solution {
                 .collect(
                         () -> new int[2],
                         (arr, i) -> arr[i % 2] += num_list[i],
-                        (a, b) -> {
-                            a[0] += b[0];
-                            a[1] += b[1];
-                        }
+                        (a, b) -> {}
                 );
 
         return Math.max(sums[0], sums[1]);
